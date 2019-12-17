@@ -1,0 +1,8 @@
+README.rst
+setup.py
+pyquartus/__init__.py
+pyquartus/pyquartus.py
+pyquartus.egg-info/PKG-INFO
+pyquartus.egg-info/SOURCES.txt
+pyquartus.egg-info/dependency_links.txt
+pyquartus.egg-info/top_level.txt

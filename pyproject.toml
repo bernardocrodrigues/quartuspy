@@ -1,0 +1,30 @@
+[tool.poetry]
+name = "pyquartus"
+version = "0.1.0"
+description = "Lorem ipsum dolor sit amet."
+authors = ["Bernardo Rodrigues <bernardocrodrigues@live.com>"]
+license = "GPL-3.0"
+
+# homepage = ""
+# repository = ""
+# documentation = ""
+# keywords = []
+# classifiers = [
+#     "Topic :: Software Development :: Build Tools",
+#     "Topic :: Software Development :: Libraries :: Python Modules"
+# ]
+
+[tool.poetry.dependencies]
+python = "^3.7"
+
+[tool.poetry.dev-dependencies]
+flake8 = "^3.7"
+pytest = "^5.0"
+pytest-cov = "^2.7"
+tox = "^3.13"
+pylint = "^2.3"
+autopep8 = "^1.4"
+
+[build-system]
+requires = ["poetry>=0.12"]
+build-backend = "poetry.masonry.api"

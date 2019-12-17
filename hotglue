@@ -1,0 +1,106 @@
+#!/bin/bash
+
+magenta () { echo -e "\e[1m\e[35m$1\e[0m"; }
+red () { echo -e "\e[1m\e[31m$1\e[0m"; }
+green () { echo -e "\e[1m\e[32m$1\e[0m"; }
+
+unit_test () 
+{ 
+    poetry run py.test tests; 
+}
+
+flake_test ()
+{
+    poetry run flake8 --ignore=E501 somador
+}
+
+print_info () 
+{
+    magenta "--------------Module--------------"
+    echo $(grep -E "^name" pyproject.toml)
+    echo $(grep -E "^version" pyproject.toml)
+    magenta "--------------Poetry--------------"
+    poetry --version
+    magenta "--------------Python--------------"
+    poetry run python --version
+    magenta "--------------Environment---------"
+	poetry run pip list
+
+}
+
+code_coverage ()
+{   
+    if [ $1 -e 0 ]; then
+        if [ $1 = "--html" ]; then
+            magenta "Using HTML report"
+            poetry run py.test --cov-report html --cov=somador tests
+        else
+            magenta "Defaulting to CLI report"
+            poetry run py.test --cov-report term-missing --cov=somador tests
+        fi
+    else
+        magenta "Defaulting to CLI report"
+        poetry run py.test --cov-report term-missing --cov=somador tests
+    fi
+}   
+
+if [ $1 = start ]; then
+    poetry install
+elif [ $1 = info ]; then
+    print_info
+elif [ $1 = unit_test ]; then
+    magenta "Running Unit Tests test..."
+    unit_test
+    status=$?
+    if [ $status = 0 ]; then 
+        green "Succeded!"
+        exit 0
+    else
+        red "Failed!"
+        exit 1
+    fi
+elif [ $1 = flake_test ]; then
+    magenta "Running Flake8 test..."
+    flake_test
+    status=$?
+    if [ $status = 0 ]; then 
+        green "Succeded!"
+        exit 0
+    else
+        red "Failed!"
+        exit 1
+    fi
+elif [ $1 = code_coverage ]; then
+    magenta "Running Code Coverage..."
+    code_coverage $2
+    status=$?
+    if [ $status = 0 ]; then 
+        green "Succeded!"
+        exit 0
+    else
+        red "Failed!"
+        exit 1
+    fi
+elif [ $1 = tox ]; then
+    magenta "Running Tox test suite..."
+    poetry run tox
+    status=$?
+    if [ $status = 0 ]; then 
+        green "Succeded!"
+        exit 0
+    else
+        red "Failed!"
+        exit 1
+    fi
+
+
+elif [ $1 = build ]; then
+
+    if [ $2 -e 0 ]; then
+        echo default
+    else
+        if [ $2 = docs ]; then
+            poetry run make -c ./docs html
+        fi
+    fi
+fi

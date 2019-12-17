@@ -1,0 +1,4 @@
+
+
+class EnvironmentNotDefined(Exception):
+    pass
